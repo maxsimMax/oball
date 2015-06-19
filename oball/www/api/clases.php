@@ -1,7 +1,13 @@
+<<<<<<< HEAD
 <?php
 	//в этом файле содержатся все классы и методы api
 	class db{ 
 		//отдельный клас для работы с базой данных
+=======
+﻿<?php
+	//в этом файле содержатся все классы и методы api
+	class db{//отдельный клас для работы с базой данных
+>>>>>>> origin/master
 		protected $base;
 		
 		function db_connect($DB_HOST="localhost",$DB_USER="root",$DB_PASS="")
@@ -39,6 +45,7 @@
 			exit;
 		}
 		
+<<<<<<< HEAD
 		
 		function get_tournament($par1)//поиск турнира по названию
 		{
@@ -49,6 +56,17 @@
 			}
 			else{
 				$query=mysql_query('SELECT t_id,t_uid,t_type,t_name,t_city,t_game_name,t_description,t_params,t_rating,t_created FROM o_tournaments WHERE t_name LIKE "%'.$name.'%" OR t_description LIKE "%'.$name.'%"');
+=======
+		function get_tournament($par1)//поиск турнира по названию
+		{
+			$name=json_decode($par1)->name;
+			if ($name=="")//если переданный параметр пустой то возвращаем ошибку
+			{
+				return $this->error_message('you must enter a value');
+			}
+			else{
+				$query=mysql_query('SELECT t_id,t_uid,t_type,t_name,t_city,t_game_name,t_description,t_params,t_rating,t_created FROM o_tournaments WHERE t_name LIKE "%'.mysql_real_escape_string($name).'%"');
+>>>>>>> origin/master
 				if (mysql_error()!='')//если ошибка в запросе то выводим ее
 				{
 					return $this->error_message(mysql_error());
@@ -56,6 +74,7 @@
 				else{
 					if (mysql_num_rows($query)>0)
 					{
+<<<<<<< HEAD
 						$tournaments=array();
 						$i=0;
 						while ($row=mysql_fetch_assoc($query))
@@ -64,6 +83,9 @@
 							$i++;
 						}
 						return json_encode($tournaments);//возвращаем Первый найденый турнир
+=======
+						return json_encode(mysql_fetch_array($query));//возвращаем Первый найденый турнир
+>>>>>>> origin/master
 					}
 					else
 					{
@@ -74,6 +96,7 @@
 		}
 		
 		function get_tournament_by_id($par1){//поиск турнира по ID и игр к нему
+<<<<<<< HEAD
 			$id=mysql_real_escape_string($par1['id']);
 			if ($id==""){
 				return $this->error_message('не получен id турнира');
@@ -81,6 +104,15 @@
 			else
 			{
 				$query=mysql_query('SELECT t_id,t_uid,t_type,t_name,t_city,t_game_name,t_description,t_params,t_rating,t_created FROM o_tournaments WHERE t_id='.$id);//сначала находим турнир по его ID
+=======
+			$id=json_decode($par1)->id;
+			if ($id==""){
+				return $this->error_message('you must enter a value');
+			}
+			else
+			{
+				$query=mysql_query('SELECT t_id, t_type FROM o_tournaments WHERE t_id='.mysql_real_escape_string($id));//сначала находим турнир по его ID
+>>>>>>> origin/master
 				if (mysql_error()!='')
 				{
 					return $this->error_message(mysql_error());
@@ -89,6 +121,7 @@
 				{
 					if (mysql_num_rows($query)>0)//если турнир с таким ID существует то начинаем искать игры
 					{
+<<<<<<< HEAD
 						$row=mysql_fetch_assoc($query);
 						$games=array();
 						$games[0]=$row;//записываем данные о турнире в массив
@@ -105,11 +138,27 @@
 										$i++;
 									}
 								}break;
+=======
+						$row=mysql_fetch_array($query);
+						switch($row['t_type'])//тут использовал оператор switch чтобы не использовать if лишний раз надеюсь так можно делать
+						{
+							case 2: //если тип_турнира=2 тогда берем игры из таблицы o_games
+								$query=mysql_query('SELECT * FROM o_games WHERE trn_id='.mysql_real_escape_string($id));
+								if (mysql_num_rows($query)>0)
+								{
+									return json_encode(mysql_fetch_array($query));
+								}
+								else
+								{
+									return $this->error_message('no matches found');
+								} break;
+>>>>>>> origin/master
 							case 3://если тип_турнира=3 или 4 тогда берем игры из таблицы o_games_e
 							case 4:
 								$query=mysql_query('SELECT * FROM o_games_e WHERE trn_id='.mysql_real_escape_string($id));
 								if (mysql_num_rows($query)>0)
 								{
+<<<<<<< HEAD
 									$i=1;
 									while ($row=mysql_fetch_assoc($query))
 									{
@@ -172,6 +221,20 @@
 					else
 					{
 						return $this->error_message('no matches found');//или ошибку если ничего не нашли
+=======
+									return json_encode(mysql_fetch_array($query));
+								}
+								else
+								{
+									return $this->error_message('no matches found');
+								} break;
+							default:	return $this->error_message('nothing');//в случае если тип турнира не подходит надо что-то вернуть
+						}
+					}
+					else
+					{
+						return $this->error_message('no matches found');//если турнира с таким ID нету тогда возвратить ошибку
+>>>>>>> origin/master
 					}
 				}
 			}

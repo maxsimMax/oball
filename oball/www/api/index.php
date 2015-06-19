@@ -2,8 +2,14 @@
 	//из этого файла происходит вызов функциq api
 	include 'clases.php';//подключаем файл с api 
 	$action=$_GET['action'];//получаем название метода которое надо и записываем в переменную action
+<<<<<<< HEAD
 	$database= new db();//подключаем базу данных
 	$database->db_connect("localhost","root","");
+=======
+	
+	$database= new db();//подключаем базу данных
+	$database->db_connect("localhost","root","","oballru");
+>>>>>>> origin/master
 	$database->db_select(oballru);
 	
 	$api=new api_functions();//тут мы вызываем нужный метод
