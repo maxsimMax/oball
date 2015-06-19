@@ -1,0 +1,29 @@
+﻿<html>
+	<head>
+		<meta charset="utf-8">
+		<script type="text/javascript" src="jquery-2.1.4.min.js"></script>
+		<script type="text/javascript" src="api_demo.js"></script>
+		<style type="text/css">
+			.resulttable{
+				border:1px solid black;
+			}
+			.resulttable td{
+				border:1px solid black;
+			}
+		</style>
+	</head>
+	<body>
+		<form method="GET" id="get_tournament" action="javascript:void(null);"  onsubmit="getTournament()">
+			getTournament: <input id="get_tournament_input" name="name" type="text" maxlength="200"></input>
+		</form>
+		<br>
+		<form method="GET" id="get_tournament_by_id" action="javascript:void(null);"  onsubmit="get_tournament_by_id()">
+			getTournamentById: <input id="get_tournament_by_id_input" name="id" type="text" maxlength="200"></input>
+		</form>
+		<br>
+		<form method="GET" id="get_game" action="javascript:void(null);"  onsubmit="get_game()">
+			getGame<input id="get_game_input" name="id" type="text" maxlength="200"></input>
+		</form>
+		<div id="content"></div>
+	</body>
+</html>

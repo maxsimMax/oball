@@ -1,18 +1,19 @@
 ﻿<?php
-  if ($_GET['action'] == "gettournament") {
-	  require_once('config.inc.php');
-	 $name=$_GET['name'];
-    $query=mysql_query('SELECT * FROM o_tournaments WHERE t_name="'.$name.'"');
-	$num_query = mysql_num_rows($query);
-	if ($num_query>0)
+	//из этого файла происходит вызов функциq api
+	include 'clases.php';//подключаем файл с api 
+	$action=$_GET['action'];//получаем название метода которое надо и записываем в переменную action
+	$database= new db();//подключаем базу данных
+	$database->db_connect("localhost","root","");
+	$database->db_select(oballru);
+	
+	$api=new api_functions();//тут мы вызываем нужный метод
+	if (method_exists($api,$action))//если он существует
 	{
-		$row = mysql_fetch_array($query);
+		echo $api->$action($_GET['par']);//так как параметров у каждого метода может быть разное кол-во я решил что лучше их передавать в формате json и уже внутри метода разбирать на переменные
 	}
 	else
 	{
-		$row=array('error'=>'Совпадения не найдены');
+		echo json_encode(array('error'=>'method '.$action.'is not exists'));//если пользователь хочет метод которого нету то ошибка
 	}
-	$result=json_encode($row);
-    echo $result;
-  }
+	$database->db_disconnect();//отключить базу
 ?>
